@@ -10,6 +10,7 @@ module.exports = {
     try {
       joiHelper(validateItem,req.body)
       req.body.currentBid=req.body.startPrice
+      req.body.createdBy=req.req.user.id
       const item=await Item.create(req.body)
       res.status(201).json({message:'Item Created Successfully',item})
     } catch (error) {
@@ -35,12 +36,12 @@ bid: async (req, res) => {
     if (!bid)
       return res.status(400).json({ message: "Please Enter Bid Price" });
     const item = await Item.findById(id);
-    console.log(item);
     if (bid < item.currentBid)
       return res
         .status(400)
         .json({ message: "Biding Price Should be Greater than Current Bid" });
     if (!item) return res.status(404).json({ message: "Item not Found" });
+    if(item.createdBy==req.user.id) return res.status(400).json({message:'You Cannot Bid on Your Own Item'})
     const user = await User.findById(req.user.id);
     if (user.amount < bid)
       return res.status(400).json({ message: "Not Enough Balance" });

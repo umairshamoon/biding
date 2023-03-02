@@ -5,6 +5,7 @@ const schema = new Schema({
   startPrice: { type: Number, required: true,default:1 },
   timeWindow: { type: Number, required: true },
   currentBid: { type: Number, required: true, },
-  bidStatus:{type:Boolean,default:true}
+  bidStatus:{type:Boolean,default:true},
+  createdBy:{type:Schema.Types.ObjectId,ref:'user'},
 })
 module.exports = model('item', schema) 
