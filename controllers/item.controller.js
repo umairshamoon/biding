@@ -8,7 +8,8 @@ module.exports = {
   create: async (req, res) => {
     try {
       joiHelper(validateItem,req.body)
-      await Item.create(req.body)
+      const item=await Item.create(req.body)
+      res.status(201).json({message:'Item Created Successfully',item})
     } catch (error) {
       return res.status(400).json({
         message: error.message || 'Something went Wrong',
