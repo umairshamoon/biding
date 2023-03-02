@@ -5,6 +5,6 @@ const { isLogin } = require('../middleware')
 
 router.post('/create',isLogin,create)
 router.get('/',isLogin,getAll)
-router.post('/bid/:id',isLogin,bid)
+router.put('/bid/:id',isLogin,bid)
 
 module.exports = router
