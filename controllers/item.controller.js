@@ -10,8 +10,19 @@ module.exports = {
     try {
       joiHelper(validateItem,req.body)
       req.body.currentBid=req.body.startPrice
-      req.body.createdBy=req.user.id
+      // req.body.createdBy=req.user.id
       const item=await Item.create(req.body)
+      setTimeout(async () => {
+       const updatedItem= await Item.findById(item._id)
+       updatedItem.bidStatus=false
+       if(updatedItem.lastBidder)
+       {
+        const user=await User.findById(updatedItem.lastBidder)
+        user.amount-=updatedItem.currentBid
+        await user.save()
+      }
+      await updatedItem.save()
+      }, item.timeWindow * 1000);
       res.status(201).json({message:'Item Created Successfully',item})
     } catch (error) {
       return res.status(400).json({
