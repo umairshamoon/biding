@@ -23,6 +23,7 @@ module.exports = {
       res.status(200).json({
         message: 'Login successfully',
         token: jwtSign({ id: user.id }),
+        amount:user.amount
       })
     } catch (error) {
       res.status(400).json({ message: error.message })
@@ -35,8 +36,6 @@ module.exports = {
 
       const user = await User.findOne({ email })
       if (user) throw Error('Email already exist')
-
-      //VALIDATE REQUEST BODY
       joiHelper(validateUser, req.body)
 
       await User.create({

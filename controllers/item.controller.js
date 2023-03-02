@@ -1,5 +1,6 @@
 //models
 const Item = require('../models/item.model')
+const User =require('../models/user.model')
 //validations
 const validateItem =require('../validations/item.validation')
 //helpers
@@ -29,6 +30,8 @@ module.exports = {
 bid:async(req,res)=>{try{
   const {id}=req.params
   const item=Item.findById(id)
-  // if(!)
+  if(!item) return res.status(404).json({message:'Item not Found'})
+  const user=await User.findById(req.user.id)
+  // if()
 }catch(error){res.status(400).json({ message: error.message })}}
 }
