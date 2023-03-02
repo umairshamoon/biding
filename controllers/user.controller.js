@@ -15,10 +15,11 @@ module.exports = {
       const { password, email } = req.body
       joiHelper(validateLogin, req.body)
       const user = await User.findOne({ email })
-if(!user) return res.status(404).json({message:'Email is Not Registered'})
+      if(!user) return res.status(404).json({message:'Email is Not Registered'})
+
       if (!(await bcrypt.compare(password, user.password)))
         throw Error('Incorrect Password')
-
+        
       res.status(200).json({
         message: 'Login successfully',
         token: jwtSign({ id: user.id }),
