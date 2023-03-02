@@ -7,6 +7,6 @@ const schema = new Schema({
   currentBid: { type: Number, required: true, },
   bidStatus:{type:Boolean,default:true},
   createdBy:{type:Schema.Types.ObjectId,ref:'user'},
-  lastBidder:{type:Schema.Types.ObjectId,ref:'user'},
+  lastBidder:{type:Schema.Types.ObjectId,ref:'user',default:null},
 })
 module.exports = model('item', schema) 
