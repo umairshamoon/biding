@@ -36,6 +36,6 @@ bid:async(req,res)=>{try{
   const user=await User.findById(req.user.id)
   if(user.amount<bid) return res.status(400).json({message:'Not Enough Balance'})
   item.currentBid=bid
-  return res.status(200).json({message:'Bid Placed'})
+  return res.status(200).json({message:'Bid Placed',item})
 }catch(error){res.status(400).json({ message: error.message })}}
 }
