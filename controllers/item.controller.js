@@ -45,6 +45,7 @@ bid: async (req, res) => {
     if (user.amount < bid)
       return res.status(400).json({ message: "Not Enough Balance" });
     item.currentBid = bid;
+    await item.save()
     return res.status(200).json({ message: "Bid Placed", item });
   } catch (error) {
     res.status(400).json({ message: error.message });
