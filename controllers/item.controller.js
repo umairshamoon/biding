@@ -22,7 +22,7 @@ module.exports = {
 
   getAll:async(req,res)=>{
     try{
-    const items=await Item.find()
+    const items=await Item.find({bidStatus:true})
     if(!items.length) return res.status(404).json({message:'No Item In Database'})
     res.status(200).json(items)
   }catch(error)
@@ -55,4 +55,10 @@ bid: async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 },
+
+getCompleted:async(req,res)=>{try{
+  const items=await Item.find({bidStatus:false})
+  if(!items.length) return res.status(404).json({message:'No Item In Database'})
+  res.status(200).json(items)
+}catch(error){res.status(400).json({ message: error.message })}}
 }
