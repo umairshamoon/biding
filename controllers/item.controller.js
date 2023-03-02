@@ -19,6 +19,7 @@ module.exports = {
       })
     }
   },
+
   getAll:async(req,res)=>{
     try{
     const items=await Item.find()
@@ -29,6 +30,7 @@ module.exports = {
     res.status(400).json({ message: error.message })
   }
 },
+
 bid: async (req, res) => {
   try {
     const { id } = req.params;
@@ -46,6 +48,7 @@ bid: async (req, res) => {
     if (user.amount < bid)
       return res.status(400).json({ message: "Not Enough Balance" });
     item.currentBid = bid;
+    item.lastBidder=req.user.id
     await item.save()
     return res.status(200).json({ message: "Bid Placed", item });
   } catch (error) {
