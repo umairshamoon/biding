@@ -10,9 +10,7 @@ require('./start/db')(MONGO_URI)
 require('./start/routes')(app, express)
 
 //starting server
-require('http')
-  .createServer(app)
-  .listen(PORT, () => {
+  app.listen(PORT, () => {
     console.clear()
     console.log(`Listening at port ${PORT}`)
   })

@@ -25,5 +25,9 @@ module.exports = {
     res.status(400).json({ message: error.message })
   }
 },
-bid:async(req,res)=>{try{}catch(error){res.status(400).json({ message: error.message })}}
+bid:async(req,res)=>{try{
+  const {id}=req.params
+  const item=Item.findById(id)
+  // if(!)
+}catch(error){res.status(400).json({ message: error.message })}}
 }
