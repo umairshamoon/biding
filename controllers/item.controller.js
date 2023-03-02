@@ -28,14 +28,26 @@ module.exports = {
     res.status(400).json({ message: error.message })
   }
 },
-bid:async(req,res)=>{try{
-  const {id}=req.params
-  const {bid}=req.body
-  const item=Item.findById(id)
-  if(!item) return res.status(404).json({message:'Item not Found'})
-  const user=await User.findById(req.user.id)
-  if(user.amount<bid) return res.status(400).json({message:'Not Enough Balance'})
-  item.currentBid=bid
-  return res.status(200).json({message:'Bid Placed',item})
-}catch(error){res.status(400).json({ message: error.message })}}
+bid: async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { bid } = req.body;
+    if (!bid)
+      return res.status(400).json({ message: "Please Enter Bid Price" });
+    const item = await Item.findById(id);
+    console.log(item);
+    if (bid < item.currentBid)
+      return res
+        .status(400)
+        .json({ message: "Biding Price Should be Greater than Current Bid" });
+    if (!item) return res.status(404).json({ message: "Item not Found" });
+    const user = await User.findById(req.user.id);
+    if (user.amount < bid)
+      return res.status(400).json({ message: "Not Enough Balance" });
+    item.currentBid = bid;
+    return res.status(200).json({ message: "Bid Placed", item });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+},
 }
