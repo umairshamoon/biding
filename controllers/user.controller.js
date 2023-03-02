@@ -40,7 +40,6 @@ module.exports = {
       joiHelper(validateUser, req.body)
 
       await User.create({
-        username,
         email,
         password: await bcrypt.hash(password, 10),
       })
