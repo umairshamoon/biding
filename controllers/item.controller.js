@@ -10,7 +10,7 @@ module.exports = {
     try {
       joiHelper(validateItem,req.body)
       req.body.currentBid=req.body.startPrice
-      // req.body.createdBy=req.user.id
+      req.body.createdBy=req.user.id
       const item=await Item.create(req.body)
       setTimeout(async () => {
        const updatedItem= await Item.findById(item._id)
