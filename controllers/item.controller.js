@@ -9,6 +9,7 @@ module.exports = {
   create: async (req, res) => {
     try {
       joiHelper(validateItem,req.body)
+      req.body.currentBid=req.body.startPrice
       const item=await Item.create(req.body)
       res.status(201).json({message:'Item Created Successfully',item})
     } catch (error) {
@@ -29,9 +30,12 @@ module.exports = {
 },
 bid:async(req,res)=>{try{
   const {id}=req.params
+  const {bid}=req.body
   const item=Item.findById(id)
   if(!item) return res.status(404).json({message:'Item not Found'})
   const user=await User.findById(req.user.id)
-  // if()
+  if(user.amount<bid) return res.status(400).json({message:'Not Enough Balance'})
+  item.currentBid=bid
+  return res.status(200).json({message:'Bid Placed'})
 }catch(error){res.status(400).json({ message: error.message })}}
 }

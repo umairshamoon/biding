@@ -6,5 +6,3 @@ const schema = new Schema({
   amount:{type:Number,default:0}
 })
 module.exports = model('user', schema)
-
-// 3fLSlg7pGowG6JVv
