@@ -10,7 +10,7 @@ module.exports = {
     try {
       joiHelper(validateItem,req.body)
       req.body.currentBid=req.body.startPrice
-      req.body.createdBy=req.req.user.id
+      req.body.createdBy=req.user.id
       const item=await Item.create(req.body)
       res.status(201).json({message:'Item Created Successfully',item})
     } catch (error) {
