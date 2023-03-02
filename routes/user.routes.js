@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const user = require('../controllers/user.controller')
+const {login,register,depositAmount} = require('../controllers/user.controller')
 const { isLogin } = require('../middleware')
 
-router.post('/login', user.login)
-router.post('/register', user.register)
-router.post('/deposit',isLogin, user.register)
+router.post('/login', login)
+router.post('/register', register)
+router.post('/deposit',isLogin, depositAmount)
 
 module.exports = router

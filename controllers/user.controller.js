@@ -44,7 +44,7 @@ module.exports = {
         password: await bcrypt.hash(password, 10),
       })
       res.status(200).json({
-        message: 'Your request has been sent for approval',
+        message: 'Your Account has Created',
       })
     } catch (error) {
       return res.status(400).json({
