@@ -6,5 +6,7 @@ const { isLogin } = require('../middleware')
 
 router.post('/login', user.login)
 router.post('/register', user.register)
+router.post('/deposit',isLogin, user.register)
+
 
 module.exports = router

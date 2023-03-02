@@ -15,7 +15,7 @@ module.exports = {
       const { password, email } = req.body
       joiHelper(validateLogin, req.body)
       const user = await User.findOne({ email })
-
+if(!user) return res.status(404).json({message:'Email is Not Registered'})
       if (!(await bcrypt.compare(password, user.password)))
         throw Error('Incorrect Password')
 
@@ -52,4 +52,12 @@ module.exports = {
       })
     }
   },
+  depositAmount:async(req,res)=>{try{
+    const {amount}=req.body
+    if(amount<=0) return res.status(400).json({message:'Please Enter Valid Amount'})
+    const user=await User.findById(req.user.id)
+    user.amount+=amount
+    await user.save()
+    res.status(200).json({message:'Amount has deposited To Your Account'})
+  }catch(error){res.status(400).json({ message: error.message })}}
 }
