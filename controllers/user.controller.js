@@ -23,13 +23,11 @@ module.exports = {
       res.status(200).json({
         message: 'Login successfully',
         token: jwtSign({ id: user.id }),
-        amount:user.amount
       })
     } catch (error) {
       res.status(400).json({ message: error.message })
     }
   },
-
   register: async (req, res) => {
     try {
       const { password, username, email } = req.body
@@ -57,6 +55,12 @@ module.exports = {
     const user=await User.findById(req.user.id)
     user.amount+=amount
     await user.save()
-    res.status(200).json({message:'Amount has deposited To Your Account'})
-  }catch(error){res.status(400).json({ message: error.message })}}
+    res.status(200).json({message:'Amount has deposited To Your Account',user})
+  }catch(error){res.status(400).json({ message: error.message })}},
+  getMe:async(req,res)=>{try{
+    const user=await User.findById(req.user.id).select('-password')
+    res.status(200).json(user)
+  }catch(error){
+    console.log(error)
+    res.status(400).json({ message: error.message })}}
 }

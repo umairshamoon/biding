@@ -12,18 +12,36 @@ module.exports = {
       req.body.currentBid=req.body.startPrice
       req.body.createdBy=req.user.id
       const item=await Item.create(req.body)
-      setTimeout(async () => {
-       const updatedItem= await Item.findById(item._id)
-       updatedItem.bidStatus=false
-       if(updatedItem.lastBidder)
-       {
-        const user=await User.findById(updatedItem.lastBidder)
-        user.amount-=updatedItem.currentBid
-        await user.save()
-      }
-      await updatedItem.save()
-      }, item.timeWindow * 1000);
-      res.status(201).json({message:'Item Created Successfully',item})
+      let user={}
+      // setTimeout(async () => {
+      //  const updatedItem= await Item.findById(item._id)
+      //  updatedItem.bidStatus=false
+      //  if(updatedItem.lastBidder)
+      //  {
+      //    user=await User.findById(updatedItem.lastBidder)
+      //   user.amount-=updatedItem.currentBid
+      //   await user.save()
+      // }
+      // await updatedItem.save() 
+      // }, item.timeWindow * 1000);
+      const timeoutPromise = new Promise(async (resolve, reject) => {
+        setTimeout(async () => {
+          const updatedItem = await Item.findById(item._id);
+          updatedItem.bidStatus = false;
+  
+          if (updatedItem.lastBidder) {
+            user = await User.findById(updatedItem.lastBidder);
+            user.amount -= updatedItem.currentBid;
+            await user.save();
+          }
+  
+          await updatedItem.save();
+          resolve();
+        }, item.timeWindow * 1000);
+      });
+  
+      await timeoutPromise;
+    res.status(201).json({message:'Item Created'})
     } catch (error) {
       return res.status(400).json({
         message: error.message || 'Something went Wrong',
@@ -34,7 +52,7 @@ module.exports = {
   getAll:async(req,res)=>{
     try{
     const items=await Item.find({bidStatus:true})
-    if(!items.length) return res.status(404).json({message:'No Item In Database'})
+    if(!items.length) return res.status(404).json({message:'No Ongoing Bids Right Now'})
     res.status(200).json(items)
   }catch(error)
   {
@@ -49,6 +67,7 @@ bid: async (req, res) => {
     if (!bid)
       return res.status(400).json({ message: "Please Enter Bid Price" });
     const item = await Item.findById(id);
+    if(!item.bidStatus) return res.status(400).json({message:"Bid Has Closed"})
     if (bid < item.currentBid)
       return res
         .status(400)
@@ -69,7 +88,7 @@ bid: async (req, res) => {
 
 getCompleted:async(req,res)=>{try{
   const items=await Item.find({bidStatus:false})
-  if(!items.length) return res.status(404).json({message:'No Item In Database'})
+  if(!items.length) return res.status(404).json({message:'No Completed Bids Right Now'})
   res.status(200).json(items)
 }catch(error){res.status(400).json({ message: error.message })}}
 }
